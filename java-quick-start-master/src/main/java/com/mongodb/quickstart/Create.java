@@ -16,41 +16,52 @@ import static java.util.Arrays.asList;
 
 public class Create {
 
-    private static final Random rand = new Random();
+//    private static final Random rand = new Random();
 
-    public static void main(String[] args) {
+    String username, password;
+
+    public void createUser(String username,String password) {
+
+        this.username = username;
+        this.password = password;
+
         try (MongoClient mongoClient = MongoClients.create("mongodb+srv://Shivang:ZSbhhO7RfY9VitJB@cluster0.5fbiw.mongodb.net/testDatabase?retryWrites=true&w=majority")) {
 
-            MongoDatabase sampleTrainingDB = mongoClient.getDatabase("sample_training");
-            MongoCollection<Document> gradesCollection = sampleTrainingDB.getCollection("grades");
+            MongoDatabase beswaadDB = mongoClient.getDatabase("beswaad");
+            MongoCollection<Document> usersCollection = beswaadDB.getCollection("users");
 
-            insertOneDocument(gradesCollection);
-            insertManyDocuments(gradesCollection);
+            insertOneDocument(usersCollection);
+//            insertManyDocuments(gradesCollection);
         }
     }
 
-    private static void insertOneDocument(MongoCollection<Document> gradesCollection) {
-        gradesCollection.insertOne(generateNewGrade(10000d, 1d));
-        System.out.println("One grade inserted for studentId 10000.");
+    private void insertOneDocument(MongoCollection<Document> usersCollection) {
+        usersCollection.insertOne(generateNewUser(username, password));
+        System.out.println("One user inserted for username " + username + " and password " + password);
     }
 
-    private static void insertManyDocuments(MongoCollection<Document> gradesCollection) {
-        List<Document> grades = new ArrayList<>();
-        for (double classId = 1d; classId <= 10d; classId++) {
-            grades.add(generateNewGrade(10001d, classId));
-        }
+//    private static void insertManyDocuments(MongoCollection<Document> gradesCollection) {
+//        List<Document> grades = new ArrayList<>();
+//        for (double classId = 1d; classId <= 10d; classId++) {
+//            grades.add(generateNewGrade(10001d, classId));
+//        }
+//
+//        gradesCollection.insertMany(grades, new InsertManyOptions().ordered(false));
+//        System.out.println("Ten grades inserted for studentId 10001.");
+//    }
 
-        gradesCollection.insertMany(grades, new InsertManyOptions().ordered(false));
-        System.out.println("Ten grades inserted for studentId 10001.");
-    }
+//    private static Document generateNewGrade(double studentId, double classId) {
+//        List<Document> scores = asList(new Document("type", "exam").append("score", rand.nextDouble() * 100),
+//                                       new Document("type", "quiz").append("score", rand.nextDouble() * 100),
+//                                       new Document("type", "homework").append("score", rand.nextDouble() * 100),
+//                                       new Document("type", "homework").append("score", rand.nextDouble() * 100));
+//        return new Document("_id", new ObjectId()).append("student_id", studentId)
+//                                                  .append("class_id", classId)
+//                                                  .append("scores", scores);
+//    }
 
-    private static Document generateNewGrade(double studentId, double classId) {
-        List<Document> scores = asList(new Document("type", "exam").append("score", rand.nextDouble() * 100),
-                                       new Document("type", "quiz").append("score", rand.nextDouble() * 100),
-                                       new Document("type", "homework").append("score", rand.nextDouble() * 100),
-                                       new Document("type", "homework").append("score", rand.nextDouble() * 100));
-        return new Document("_id", new ObjectId()).append("student_id", studentId)
-                                                  .append("class_id", classId)
-                                                  .append("scores", scores);
+    private static Document generateNewUser(String username, String password) {
+        return new Document("_id", new ObjectId()).append("username", username)
+                                                  .append("password", password);
     }
 }
