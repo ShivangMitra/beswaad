@@ -11,6 +11,9 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Sorts.descending;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 public class Read {
 
     public boolean readUser(String username, String password) {
@@ -72,6 +75,28 @@ public class Read {
 //            for (Document student : docs) {
 //                System.out.println(student.toJson());
 //            }
+        }
+    }
+
+    public void adminRevenue(){
+        try (MongoClient mongoClient = MongoClients.create("mongodb+srv://Shivang:ZSbhhO7RfY9VitJB@cluster0.5fbiw.mongodb.net/testDatabase?retryWrites=true&w=majority")) {
+            MongoDatabase beswaadDB = mongoClient.getDatabase("beswaad");
+            MongoCollection<Document> revenueCollection = beswaadDB.getCollection("revenue");
+
+            MongoCursor<Document> cur = revenueCollection.find().iterator();
+
+            while(cur.hasNext()){
+                String a = cur.next().toJson();
+                JSONParser parser = new JSONParser();
+                try {
+                    JSONObject json = (JSONObject) parser.parse(a);
+                    System.out.print(json.get("type") + "\t" + json.get("earnings") + "\t");
+                }
+                catch (Exception e) {
+                    System.out.println("Error parsing");
+                }
+            }
+            System.out.println();
         }
     }
 }

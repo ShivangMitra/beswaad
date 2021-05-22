@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Login {
 
-    public static void main(String []args){
+    public String userLogin(){
 
         Scanner sc = new Scanner(System.in);
 
@@ -27,8 +27,7 @@ public class Login {
                 Read readUser = new Read();
                 System.out.println("Please Wait . . .");
                 if(readUser.readUser(username, password)) {
-                    System.out.println("Welcome " + username);
-                    break;
+                    return username;
                 }
             } else if (signIn == '2') {
                 String username, password, confPassword;
@@ -36,6 +35,7 @@ public class Login {
                 System.out.println("Enter your username: ");
                 sc.nextLine();
                 username = sc.nextLine();
+                //check if username already exists
 
                 System.out.println("Enter your password: ");
                 password = sc.nextLine();
@@ -44,6 +44,7 @@ public class Login {
                 confPassword = sc.nextLine();
 
                 if(password.equals(confPassword)){
+                    System.out.println("Please wait . . .");
                     Create userCreate = new Create();
                     userCreate.createUser(username, password);
                     System.out.println("Your account has been created, please proceed to login");
