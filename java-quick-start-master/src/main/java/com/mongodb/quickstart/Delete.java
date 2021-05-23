@@ -14,28 +14,29 @@ import static com.mongodb.client.model.Filters.gte;
 
 public class Delete {
 
-    public static void main(String[] args) {
+    public void deleteItem(String itemName) {
         try (MongoClient mongoClient = MongoClients.create("mongodb+srv://Shivang:ZSbhhO7RfY9VitJB@cluster0.5fbiw.mongodb.net/testDatabase?retryWrites=true&w=majority")) {
-            MongoDatabase sampleTrainingDB = mongoClient.getDatabase("sample_training");
-            MongoCollection<Document> gradesCollection = sampleTrainingDB.getCollection("grades");
+            MongoDatabase beswaadDB = mongoClient.getDatabase("beswaad");
+            MongoCollection<Document> menuCollection = beswaadDB.getCollection("menu");
 
             // delete one document
-            Bson filter = eq("student_id", 10000);
-            DeleteResult result = gradesCollection.deleteOne(filter);
-            System.out.println(result);
+            Bson filter = eq("name", itemName);
+            DeleteResult result = menuCollection.deleteOne(filter);
 
-            // findOneAndDelete operation
-            filter = eq("student_id", 10002);
-            Document doc = gradesCollection.findOneAndDelete(filter);
-            System.out.println(doc.toJson(JsonWriterSettings.builder().indent(true).build()));
+            System.out.println(itemName + " has been removed from the menu");
 
-            // delete many documents
-            filter = gte("student_id", 10000);
-            result = gradesCollection.deleteMany(filter);
-            System.out.println(result);
-
-            // delete the entire collection and its metadata (indexes, chunk metadata, etc).
-            gradesCollection.drop();
+//            // findOneAndDelete operation
+//            filter = eq("student_id", 10002);
+//            Document doc = gradesCollection.findOneAndDelete(filter);
+//            System.out.println(doc.toJson(JsonWriterSettings.builder().indent(true).build()));
+//
+//            // delete many documents
+//            filter = gte("student_id", 10000);
+//            result = gradesCollection.deleteMany(filter);
+//            System.out.println(result);
+//
+//            // delete the entire collection and its metadata (indexes, chunk metadata, etc).
+//            gradesCollection.drop();
         }
     }
 }

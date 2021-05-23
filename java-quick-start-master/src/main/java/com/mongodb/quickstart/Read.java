@@ -99,4 +99,40 @@ public class Read {
             System.out.println();
         }
     }
+
+    public void adminMenu(){
+        try (MongoClient mongoClient = MongoClients.create("mongodb+srv://Shivang:ZSbhhO7RfY9VitJB@cluster0.5fbiw.mongodb.net/testDatabase?retryWrites=true&w=majority")) {
+            MongoDatabase beswaadDB = mongoClient.getDatabase("beswaad");
+            MongoCollection<Document> menuCollection = beswaadDB.getCollection("menu");
+
+            MongoCursor<Document> cur = menuCollection.find().iterator();
+
+            ArrayList<JSONObject> arr = new ArrayList<>();
+
+            System.out.println("Active Items:");
+
+            while (cur.hasNext()) {
+                String a = cur.next().toJson();
+                JSONParser parser = new JSONParser();
+                try {
+                    JSONObject json = (JSONObject) parser.parse(a);
+                    if (json.get("onMenuByAdmin").toString().equals("true")) {
+                        System.out.println("Name       : " + json.get("name") + "\nRegion     : " + json.get("region") + "\nType       : " + json.get("type") + "\nPrice      : " + json.get("price") + "\nIngredients: " + json.get("ingredients"));
+                        System.out.println();
+                    }
+                    else{
+                        arr.add(json);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error parsing");
+                }
+            }
+            System.out.println("Inactive Items:");
+            for(int i=0;i<arr.size();i++){
+                System.out.println("Name       : " + arr.get(i).get("name") + "\nRegion     : " + arr.get(i).get("region") + "\nType       : " + arr.get(i).get("type") + "\nPrice      : " + arr.get(i).get("price") + "\nIngredients: " + arr.get(i).get("ingredients"));
+            }
+
+            System.out.println();
+        }
+    }
 }

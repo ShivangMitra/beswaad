@@ -45,6 +45,7 @@ public class Beswaad {
                 System.out.println("Check Menu      ( 4 )");
                 System.out.println("Employee Status ( 5 )");
                 System.out.println("Users Signed Up ( 6 )");
+                System.out.println("Log Out         ( q )");
 
                 choice = sc.next().charAt(0);
 
@@ -56,16 +57,23 @@ public class Beswaad {
                     //Warehouse
                 }
                 else if(choice == '3'){
-                    //PROMO Codes
+
+
+                    PromoCode promoCode = new PromoCode();
+                    promoCode.promoCode();
                 }
                 else if(choice == '4'){
-                    //Menu
+                    Menu menu = new Menu();
+                    menu.menu();
                 }
                 else if(choice == '5'){
                     //Employee
                 }
                 else if(choice == '6'){
                     //Users
+                }
+                else if(choice == 'q'){
+                    break;
                 }
                 else {
                     System.out.println("You pressed a wrong key!");

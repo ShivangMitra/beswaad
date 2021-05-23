@@ -7,6 +7,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.InsertManyOptions;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +64,20 @@ public class Create {
     private static Document generateNewUser(String username, String password) {
         return new Document("_id", new ObjectId()).append("username", username)
                                                   .append("password", password);
+    }
+
+
+    public  void addItemToMenu(String name, boolean onMenu, boolean onMenuByAdmin, String region, String type, int price, int selectionNum, JSONObject ingredients){
+
+        try (MongoClient mongoClient = MongoClients.create("mongodb+srv://Shivang:ZSbhhO7RfY9VitJB@cluster0.5fbiw.mongodb.net/testDatabase?retryWrites=true&w=majority")) {
+
+            MongoDatabase beswaadDB = mongoClient.getDatabase("beswaad");
+            MongoCollection<Document> menuCollection = beswaadDB.getCollection("menu");
+
+            menuCollection.insertOne(new Document("_id", new ObjectId()).append("name", name).append("onMenu", onMenu).append("onMenuByAdmin", onMenuByAdmin).append("region", region).append("type", type).append("price", price).append("selectionNum", selectionNum).append("ingredients", ingredients).append("sellingRate", 0));
+
+            System.out.println("Item added to the Beswaad's Menu");
+            System.out.println();
+        }
     }
 }
